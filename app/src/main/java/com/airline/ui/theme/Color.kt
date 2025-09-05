@@ -12,3 +12,4 @@ val Pink40 = Color(0xFF7D5260)
 
 //Custom Colors
 val CyanBlue = Color(0xFF0066FF)
+val LightBlue = Color(0xFFCCE0FF)
