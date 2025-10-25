@@ -139,8 +139,9 @@ fun OnboardPage(
                 MyButton(
                     btnText = "Get Started",
                     click = {
-//                        navController.navigate("home")
-//                        navController popUpTo("slide") { inclusive = true }
+                        navController.navigate("home"){
+                            popUpTo("slide") { inclusive = true }
+                        }
                     }
                 )
             } else{

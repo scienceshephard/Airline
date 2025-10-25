@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.airline.ui.screens.HomeScreen
 import com.airline.ui.theme.AnimatedSplashScreen
 import com.airline.ui.screens.Screen
 import com.airline.ui.screens.SlideScreen
@@ -43,11 +44,7 @@ fun SetupNavGraph( navController: NavHostController ){
                     )
                 }
                 composable(route = Screen.SlideScreen.Slide1.route) {
-                    Box(
-                        modifier = Modifier
-                            .background(color = Color.Red)
-                            .fillMaxSize()
-                    )
+                    HomeScreen()
                 }
             }
         }
