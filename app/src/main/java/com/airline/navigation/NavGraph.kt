@@ -15,8 +15,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.airline.ui.screens.HomeScreen
+import com.airline.ui.screens.LoginScreen
 import com.airline.ui.theme.AnimatedSplashScreen
 import com.airline.ui.screens.Screen
+import com.airline.ui.screens.SignupScreen
 import com.airline.ui.screens.SlideScreen
 
 @Composable
@@ -36,15 +38,21 @@ fun SetupNavGraph( navController: NavHostController ){
 
             navigation(
                 startDestination = Screen.SlideScreen.route,
-                route = Screen.HomeGraph.route
+                route = Screen.MainGraph.route
             ) {
                 composable(route = Screen.SlideScreen.route) {
-                    SlideScreen(
-                    navController = navController
-                    )
+                    SlideScreen(navController = navController)
                 }
-                composable(route = Screen.SlideScreen.Slide1.route) {
-                    HomeScreen()
+            }
+            navigation(
+                startDestination = Screen.Login.route,
+                route = Screen.AuthGraph.route
+            ){
+                composable(Screen.Login.route) {
+                    LoginScreen()
+                }
+                composable (Screen.Signup.route){
+                    SignupScreen()
                 }
             }
         }

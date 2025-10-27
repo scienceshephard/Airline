@@ -2,18 +2,23 @@ package com.airline.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,55 +53,95 @@ fun LoginScreen(){
     ) {
         Image(
             modifier = Modifier
-                .weight(1f)
+                .weight(0.5f)
                 .fillMaxWidth(),
             painter = painterResource(R.drawable.icon),
             contentDescription = "App Icon"
         )
+        Text("Log In")
         Column(
             modifier = Modifier
                 .weight(2f)
                 .border(width= 1.dp, shape= RectangleShape, color= Color.Red),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            OutlinedTextField(
-                value = userName,
-                onValueChange = { userName = it },
-
-//            leadingIcon = Icons.Filled.AccountCircle
-            )
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-
-//            leadingIcon = Icons.Filled.AccountCircle
-            )
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                trailingIcon = {
-                    val image = if(passwordVisibility)
-                        Icons.Filled.Visibility
-                    else
-                        Icons.Filled.VisibilityOff
-                    val description= if(passwordVisibility) "Hide password" else "Show password"
-                    IconButton(
-                        onClick = {passwordVisibility = !passwordVisibility}
-                    ){
-                        Icon(imageVector= image, contentDescription = description)
-                    }
-                },
-                visualTransformation = if(passwordVisibility)
-                    VisualTransformation.None
-                else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
+            Column {
+                Text("USERNAME", )
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = userName,
+                    onValueChange = { userName = it },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.AccountCircle,
+                            "Account"
+                        )
+                    },
                 )
+            }
+            Column{
+                Text("EMAIL ADDRESS")
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = email,
+                    onValueChange = { email = it },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.Email,
+                            "Email"
+                        )
+                    }
+                )
+            }
+            Column {
+                Text("PASSWORD")
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = password,
+                    onValueChange = { password = it },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.Lock,
+                            "password"
+                        )
+                    },
+                    trailingIcon = {
+                        val image = if (passwordVisibility)
+                            Icons.Filled.Visibility
+                        else
+                            Icons.Filled.VisibilityOff
+                        val description =
+                            if (passwordVisibility) "Hide password" else "Show password"
+                        IconButton(
+                            onClick = { passwordVisibility = !passwordVisibility }
+                        ) {
+                            Icon(imageVector = image, contentDescription = description)
+                        }
+                    },
+                    visualTransformation = if (passwordVisibility)
+                        VisualTransformation.None
+                    else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password
+                    )
+                )
+            }
+            MyButton(
+                click = {
+
+                },
+                btnText = "Log in",
             )
         }
     }
 }
 
-@Preview
+@Composable
+fun SignupScreen(){
+
+}
+
+@Preview( showBackground = false, showSystemUi = true  )
 @Composable
 fun LoginScreenPreview(){
     LoginScreen()

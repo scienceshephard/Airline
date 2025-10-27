@@ -69,7 +69,7 @@ fun MyButton(
             containerColor = containerColor,
             contentColor = contentColor
         ),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(5.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(text = btnText, style = Typography1.displayMedium)
@@ -139,8 +139,8 @@ fun OnboardPage(
                 MyButton(
                     btnText = "Get Started",
                     click = {
-                        navController.navigate("home"){
-                            popUpTo("slide") { inclusive = true }
+                        navController.navigate(Screen.AuthGraph.route){
+                            popUpTo(Screen.SlideScreen.route) { inclusive = true }
                         }
                     }
                 )
@@ -243,11 +243,4 @@ fun DotsIndicator(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun SlideScreenPreview(){
-
-//    SlideScreen()
 }

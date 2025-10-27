@@ -1,5 +1,5 @@
 package com.airline.navigation
 
-fun HomeGraph(){
+fun MainGraph(){
 
 }
