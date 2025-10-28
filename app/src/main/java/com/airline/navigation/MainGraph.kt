@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -28,16 +29,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.airline.ui.screens.MainScreens
+import com.airline.ui.screens.main_screens.BookingsScreen
+import com.airline.ui.screens.main_screens.HomeScreen
+import com.airline.ui.screens.main_screens.NotificationScreen
+import com.airline.ui.screens.main_screens.ProfileScreen
 
 
 @Composable
 fun BottomNavBar(
-
+    navController: NavHostController
 ){
-//    val navBackStackEntry by navController.currentBackStackEntryAsState()
-//    val currentDestination = navBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination?.route
 
     val screens = listOf(
         MainScreens.Home,
@@ -47,35 +55,36 @@ fun BottomNavBar(
     )
     Row(
         modifier = Modifier
+            .padding(horizontal = 20.dp)
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(Color.Black),
+            .background(Color.Black)
+            .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(20.dp)),
         horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         screens.forEach { item ->
-//            val isSelected = currentDestination == item.route
-//            val offset by animateDpAsState(
-//                targetValue = if (isSelected) (-20.dp) else 0.dp,
-//                label = ""
-//            )
+            val isSelected = currentDestination == item.route
+            val offset by animateDpAsState(
+                targetValue = if (isSelected) (-20.dp) else 0.dp,
+                label = item.image_desc
+            )
             Box(
                 modifier = Modifier
-//                    .offset( y = offset)
+                    .offset( y = offset)
                     .clickable {
-//                        navController.navigate(item.route){
-//                            launchSingleTop = true
-//                            restoreState = true
-//                            popUpTo(navController.graph.startDestinationId){
-//                                saveState = true
-//                            }
-//                        }
+                        navController.navigate(item.route){
+                            launchSingleTop = true
+                            restoreState = true
+                            popUpTo(navController.graph.startDestinationId){
+                                saveState = true
+                            }
+                        }
                     },
                 contentAlignment = Alignment.Center
             ) {
-//                if(isSelected){
                 Box(
-                    modifier = Modifier
+                modifier = Modifier
                         .size(56.dp)
                         .border(2.dp, Color.Blue, CircleShape),
                     contentAlignment = Alignment.Center
@@ -87,32 +96,46 @@ fun BottomNavBar(
                         modifier = Modifier.size(25.dp)
                     )
                 }
-//                }
             }
         }
     }
 }
 @Composable
 fun MainGraph(
-//    navController: NavHostController
+    navController: NavHostController
 ){
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .padding(WindowInsets.systemBars.asPaddingValues()),
         bottomBar = {
-            BottomNavBar()
+            BottomNavBar(navController)
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding).fillMaxSize()
-        ) {
-
-            Column(
-                modifier = Modifier.fillMaxSize().background(Color.Red)
+        NavHost(
+            startDestination = MainScreens.Home.route,
+            navController = navController,
+            modifier = Modifier.padding(innerPadding)
+        ){
+            composable(
+                route = MainScreens.Home.route
             ) {
-
+                HomeScreen()
+            }
+            composable(
+                route = MainScreens.Notification.route
+            ){
+                NotificationScreen()
+            }
+            composable (
+                route = MainScreens.Profile.route
+            ){
+                ProfileScreen()
+            }
+            composable (
+                route = MainScreens.Bookings.route
+            ){
+                BookingsScreen()
             }
         }
     }
@@ -121,5 +144,5 @@ fun MainGraph(
 @Preview( showSystemUi = true, showBackground = true)
 @Composable
 fun MainPrev(){
-    MainGraph()
+    MainGraph(navController = rememberNavController())
 }

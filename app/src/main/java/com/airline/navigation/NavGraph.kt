@@ -56,30 +56,8 @@ fun SetupNavGraph( navController: NavHostController ){
                 composable (Screen.Signup.route){
                     SignupScreen(navController)
                 }
-            }
-            navigation(
-                startDestination = MainScreens.Home.route,
-                route = Screen.MainGraph.route
-            ){
-                composable(
-                    route = MainScreens.Home.route
-                ) {
-                    HomeScreen()
-                }
-                composable(
-                    route = MainScreens.Notification.route
-                ){
-                    NotificationScreen()
-                }
-                composable (
-                    route = MainScreens.Profile.route
-                ){
-                    ProfileScreen()
-                }
-                composable (
-                    route = MainScreens.Bookings.route
-                ){
-                    BookingsScreen()
+                composable(Screen.MainGraph.route) {
+                    MainGraph(navController)
                 }
             }
         }
