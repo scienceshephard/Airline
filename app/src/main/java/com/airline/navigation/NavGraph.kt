@@ -1,6 +1,5 @@
 package com.airline.navigation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -9,17 +8,20 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.airline.ui.screens.HomeScreen
 import com.airline.ui.screens.LoginScreen
+import com.airline.ui.screens.MainScreens
 import com.airline.ui.theme.AnimatedSplashScreen
 import com.airline.ui.screens.Screen
 import com.airline.ui.screens.SignupScreen
 import com.airline.ui.screens.SlideScreen
+import com.airline.ui.screens.main_screens.BookingsScreen
+import com.airline.ui.screens.main_screens.HomeScreen
+import com.airline.ui.screens.main_screens.NotificationScreen
+import com.airline.ui.screens.main_screens.ProfileScreen
 
 @Composable
 fun SetupNavGraph( navController: NavHostController ){
@@ -49,10 +51,35 @@ fun SetupNavGraph( navController: NavHostController ){
                 route = Screen.AuthGraph.route
             ){
                 composable(Screen.Login.route) {
-                    LoginScreen()
+                    LoginScreen(navController)
                 }
                 composable (Screen.Signup.route){
-                    SignupScreen()
+                    SignupScreen(navController)
+                }
+            }
+            navigation(
+                startDestination = MainScreens.Home.route,
+                route = Screen.MainGraph.route
+            ){
+                composable(
+                    route = MainScreens.Home.route
+                ) {
+                    HomeScreen()
+                }
+                composable(
+                    route = MainScreens.Notification.route
+                ){
+                    NotificationScreen()
+                }
+                composable (
+                    route = MainScreens.Profile.route
+                ){
+                    ProfileScreen()
+                }
+                composable (
+                    route = MainScreens.Bookings.route
+                ){
+                    BookingsScreen()
                 }
             }
         }
