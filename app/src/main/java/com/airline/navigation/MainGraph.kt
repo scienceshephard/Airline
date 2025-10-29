@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -57,9 +58,7 @@ fun BottomNavBar(
         modifier = Modifier
             .padding(horizontal = 20.dp)
             .fillMaxWidth()
-            .wrapContentHeight()
-            .background(Color.Black)
-            .border(width = 1.dp, color = Color.Red, shape = RoundedCornerShape(20.dp)),
+            .background(color = Color.Black, shape = RoundedCornerShape(20.dp)),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -72,7 +71,7 @@ fun BottomNavBar(
             Box(
                 modifier = Modifier
                     .offset( y = offset)
-                    .clickable {
+                    .clickable{
                         navController.navigate(item.route){
                             launchSingleTop = true
                             restoreState = true
@@ -86,14 +85,24 @@ fun BottomNavBar(
                 Box(
                 modifier = Modifier
                         .size(56.dp)
-                        .border(2.dp, Color.Blue, CircleShape),
-                    contentAlignment = Alignment.Center
+                        .border(
+                            width = if(isSelected) 5.dp else 0.dp,
+                            color = if(isSelected) Color.White else Color.Transparent,
+                            shape = CircleShape
+                        )
+                    .background(
+                        color = if(isSelected) Color.Blue else Color.Transparent,
+                        shape = CircleShape
+                    ),
+                    contentAlignment = Alignment.Center,
+
                 ) {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.image_desc,
                         tint = Color.White,
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier
+                            .size(25.dp)
                     )
                 }
             }
