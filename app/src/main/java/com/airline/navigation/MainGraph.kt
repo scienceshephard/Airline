@@ -111,8 +111,9 @@ fun BottomNavBar(
 }
 @Composable
 fun MainGraph(
-    navController: NavHostController
+    rootNavController: NavHostController
 ){
+    val navController = rememberNavController()
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -122,6 +123,7 @@ fun MainGraph(
         }
     ) { innerPadding ->
         NavHost(
+            
             startDestination = MainScreens.Home.route,
             navController = navController,
             modifier = Modifier.padding(innerPadding)
@@ -153,5 +155,5 @@ fun MainGraph(
 @Preview( showSystemUi = true, showBackground = true)
 @Composable
 fun MainPrev(){
-    MainGraph(navController = rememberNavController())
+    MainGraph(rootNavController = rememberNavController())
 }

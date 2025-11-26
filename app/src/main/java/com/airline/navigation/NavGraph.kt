@@ -38,14 +38,10 @@ fun SetupNavGraph( navController: NavHostController ){
                 AnimatedSplashScreen(navController = navController)
             }
 
-            navigation(
-                startDestination = Screen.SlideScreen.route,
-                route = Screen.MainGraph.route
-            ) {
-                composable(route = Screen.SlideScreen.route) {
-                    SlideScreen(navController = navController)
-                }
+            composable(route = Screen.SlideScreen.route) {
+                SlideScreen(navController = navController)
             }
+
             navigation(
                 startDestination = Screen.Login.route,
                 route = Screen.AuthGraph.route
@@ -56,9 +52,10 @@ fun SetupNavGraph( navController: NavHostController ){
                 composable (Screen.Signup.route){
                     SignupScreen(navController)
                 }
-                composable(Screen.MainGraph.route) {
-                    MainGraph(navController)
-                }
+            }
+
+            composable(Screen.MainGraph.route) {
+                MainGraph(navController)
             }
         }
     }

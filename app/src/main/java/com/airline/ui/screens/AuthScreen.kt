@@ -125,6 +125,7 @@ fun SignupScreen(
                             Icons.Filled.Email,
                             "Email"
                         )
+
                     }
                 )
             }
@@ -391,9 +392,4 @@ fun LoginScreen(
             }
         }
     }
-}
-
-@Preview( showBackground = false, showSystemUi = true  )
-@Composable
-fun LoginScreenPreview(){
 }
