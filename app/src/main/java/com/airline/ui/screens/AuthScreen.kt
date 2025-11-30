@@ -2,7 +2,6 @@ package com.airline.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,6 +27,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,10 +38,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,7 +50,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.airline.R
 import com.airline.ui.theme.Typography
 
@@ -81,64 +82,117 @@ fun SignupScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal= 16.dp),
+            .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(40.dp))
+
         Image(
             modifier = Modifier
-                .weight(0.5f)
-                .fillMaxWidth(),
+                .size(120.dp),
             painter = painterResource(R.drawable.icon),
             contentDescription = "App Icon"
         )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         Text(
             text = "Sign up",
-            style = Typography.headlineLarge
+            style = Typography.headlineLarge,
+            fontWeight = FontWeight.Bold
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         Column(
-            modifier = Modifier
-                .weight(2f),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Column {
-                Text("USERNAME", )
+                Text(
+                    text = "USERNAME",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = userName,
                     onValueChange = { userName = it },
+                    placeholder = {
+                        Text(
+                            text = "Enter Username",
+                            color = Color.LightGray
+                        )
+                    },
                     leadingIcon = {
                         Icon(
                             Icons.Filled.AccountCircle,
-                            "Account"
+                            "Account",
+                            tint = Color.Gray
                         )
                     },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Gray,
+                        unfocusedBorderColor = Color.LightGray
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 )
             }
+
             Column{
-                Text("EMAIL ADDRESS")
+                Text(
+                    text = "EMAIL ADDRESS",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = email,
                     onValueChange = { email = it },
+                    placeholder = {
+                        Text(
+                            text = "Enter Email Address",
+                            color = Color.LightGray
+                        )
+                    },
                     leadingIcon = {
                         Icon(
                             Icons.Filled.Email,
-                            "Email"
+                            "Email",
+                            tint = Color.Gray
                         )
-
-                    }
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Gray,
+                        unfocusedBorderColor = Color.LightGray
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 )
             }
+
             Column {
-                Text("PASSWORD")
+                Text(
+                    text = "PASSWORD",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = password,
                     onValueChange = { password = it },
+                    placeholder = {
+                        Text(
+                            text = "Create Password",
+                            color = Color.LightGray
+                        )
+                    },
                     leadingIcon = {
                         Icon(
                             Icons.Filled.Lock,
-                            "password"
+                            "password",
+                            tint = Color.Gray
                         )
                     },
                     trailingIcon = {
@@ -151,7 +205,11 @@ fun SignupScreen(
                         IconButton(
                             onClick = { passwordVisibility = !passwordVisibility }
                         ) {
-                            Icon(imageVector = image, contentDescription = description)
+                            Icon(
+                                imageVector = image,
+                                contentDescription = description,
+                                tint = Color.Gray
+                            )
                         }
                     },
                     visualTransformation = if (passwordVisibility)
@@ -159,9 +217,17 @@ fun SignupScreen(
                     else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password
-                    )
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Gray,
+                        unfocusedBorderColor = Color.LightGray
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             MyButton(
                 click = {
                     navController.navigate(Screen.MainGraph.route){
@@ -170,64 +236,74 @@ fun SignupScreen(
                 },
                 btnText = "Sign up",
             )
+
             Row(
-                modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
+                modifier = Modifier.padding(vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 HorizontalDivider(
-                    modifier = Modifier
-                        .weight(1f),
-                    thickness = 1.dp
+                    modifier = Modifier.weight(1f),
+                    thickness = 1.dp,
+                    color = Color.LightGray
                 )
 
                 Text(
                     text = "OR",
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp),
-                    fontWeight = FontWeight.Bold
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
                 )
+
                 HorizontalDivider(
-                    modifier = Modifier
-                        .weight(1f),
-                    thickness = 1.dp
+                    modifier = Modifier.weight(1f),
+                    thickness = 1.dp,
+                    color = Color.LightGray
                 )
             }
 
             Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Button(
                     onClick = {
-                        //Google auth
+                        navController.navigate(Screen.MainGraph.route)
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent,
+                        containerColor = Color.White,
                         contentColor = Color.Gray
                     ),
-                    shape = RoundedCornerShape(5.dp),
-                    border = BorderStroke(1.dp, Color.Gray),
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(1.dp, Color.LightGray),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row (
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.padding(vertical = 4.dp)
                     ) {
                         Image(
                             painter = painterResource(R.drawable.google),
                             contentDescription = "google image",
-                            modifier = Modifier
-                                .size(40.dp)
+                            modifier = Modifier.size(24.dp)
                         )
-                        Text("Continue with Google")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Continue with Google",
+                            fontWeight = FontWeight.Medium
+                        )
                     }
                 }
+
                 Text(
                     text = annotatedText,
                     modifier = Modifier
                         .clickable{
-//                            Navigate to Login page
                             navController.navigate(Screen.Login.route)
                         }
-                        .fillMaxSize(),
-                    textAlign = TextAlign.Center
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 14.sp
                 )
             }
         }
@@ -257,50 +333,85 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal= 16.dp),
+            .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(40.dp))
 
         Image(
-            modifier = Modifier
-                .weight(0.5f)
-                .fillMaxWidth(),
+            modifier = Modifier.size(120.dp),
             painter = painterResource(R.drawable.icon),
             contentDescription = "App Icon"
         )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         Text(
             text = "Log in",
-            style = Typography.headlineLarge
+            style = Typography.headlineLarge,
+            fontWeight = FontWeight.Bold
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         Column(
-            modifier = Modifier
-                .weight(2f),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Column{
-                Text("EMAIL ADDRESS")
+                Text(
+                    text = "" +
+                            " ADDRESS",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = email,
                     onValueChange = { email = it },
+                    placeholder = {
+                        Text(
+                            text = "Enter Email Address",
+                            color = Color.LightGray
+                        )
+                    },
                     leadingIcon = {
                         Icon(
                             Icons.Filled.Email,
-                            "Email"
+                            "Email",
+                            tint = Color.Gray
                         )
-                    }
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Gray,
+                        unfocusedBorderColor = Color.LightGray
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 )
             }
+
             Column {
-                Text("PASSWORD")
+                Text(
+                    text = "PASSWORD",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = password,
                     onValueChange = { password = it },
+                    placeholder = {
+                        Text(
+                            text = "Enter Password",
+                            color = Color.LightGray
+                        )
+                    },
                     leadingIcon = {
                         Icon(
                             Icons.Filled.Lock,
-                            "password"
+                            "password",
+                            tint = Color.Gray
                         )
                     },
                     trailingIcon = {
@@ -313,7 +424,11 @@ fun LoginScreen(
                         IconButton(
                             onClick = { passwordVisibility = !passwordVisibility }
                         ) {
-                            Icon(imageVector = image, contentDescription = description)
+                            Icon(
+                                imageVector = image,
+                                contentDescription = description,
+                                tint = Color.Gray
+                            )
                         }
                     },
                     visualTransformation = if (passwordVisibility)
@@ -321,75 +436,99 @@ fun LoginScreen(
                     else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password
-                    )
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Gray,
+                        unfocusedBorderColor = Color.LightGray
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             MyButton(
                 click = {
                     navController.navigate(Screen.MainGraph.route)
                 },
                 btnText = "Log in",
             )
+
             Row(
-                modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
+                modifier = Modifier.padding(vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 HorizontalDivider(
-                    modifier = Modifier
-                        .weight(1f),
-                    thickness = 1.dp
+                    modifier = Modifier.weight(1f),
+                    thickness = 1.dp,
+                    color = Color.LightGray
                 )
 
                 Text(
                     text = "OR",
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp),
-                    fontWeight = FontWeight.Bold
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
                 )
+
                 HorizontalDivider(
-                    modifier = Modifier
-                        .weight(1f),
-                    thickness = 1.dp
+                    modifier = Modifier.weight(1f),
+                    thickness = 1.dp,
+                    color = Color.LightGray
                 )
             }
 
             Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Button(
                     onClick = {
-                        //Google auth
+                        navController.navigate(Screen.MainGraph.route)
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent,
+                        containerColor = Color.White,
                         contentColor = Color.Gray
                     ),
-                    shape = RoundedCornerShape(5.dp),
-                    border = BorderStroke(1.dp, Color.Gray),
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(1.dp, Color.LightGray),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row (
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.padding(vertical = 4.dp)
                     ) {
                         Image(
                             painter = painterResource(R.drawable.google),
                             contentDescription = "google image",
-                            modifier = Modifier
-                                .size(40.dp)
+                            modifier = Modifier.size(24.dp)
                         )
-                        Text("Continue with Google")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Continue with Google",
+                            fontWeight = FontWeight.Medium
+                        )
                     }
                 }
+
                 Text(
                     text = annotatedText,
                     modifier = Modifier
                         .clickable{
-//                            Navigate to Login page
-
+                            navController.navigate(Screen.Signup.route)
                         }
-                        .fillMaxSize(),
-                    textAlign = TextAlign.Center
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 14.sp
                 )
             }
         }
     }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun Preview(){
+    LoginScreen(navController = rememberNavController())
 }
