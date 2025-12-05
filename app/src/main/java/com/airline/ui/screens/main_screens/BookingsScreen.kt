@@ -50,7 +50,7 @@ import com.airline.ui.theme.Typography
 
 @Composable
 fun BookingsScreen(navController: NavHostController){
-    val activeButton = remember { mutableStateOf<Int?>(3) }
+    val activeButton = remember { mutableStateOf<Int?>(1) }
     Column(
         modifier = Modifier
             .fillMaxSize()

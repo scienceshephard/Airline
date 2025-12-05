@@ -117,7 +117,7 @@ fun MainGraph(
     ) { innerPadding ->
         NavHost(
             
-            startDestination = MainScreens.Bookings.route,
+            startDestination = MainScreens.Notification.route,
             navController = navController,
             modifier = Modifier.padding(innerPadding)
         ){
