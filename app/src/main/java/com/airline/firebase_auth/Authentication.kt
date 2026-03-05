@@ -1,15 +1,13 @@
-package com.airline.auth
+package com.airline.firebase_auth
 
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.airline.data.model.User
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider

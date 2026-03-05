@@ -1,4 +1,4 @@
-package com.airline.auth
+package com.airline.firebase_auth
 
 import com.airline.data.model.User
 
