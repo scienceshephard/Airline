@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.airline.R
 import com.airline.ui.theme.CyanBlue
 import com.airline.ui.theme.TextColor
 import com.airline.ui.theme.Typography
@@ -146,24 +147,25 @@ fun BookingsScreen(navController: NavHostController){
                                     color = CyanBlue,
                                     shape = RoundedCornerShape(20.dp)
                                 )
-                                .padding(horizontal = 10.dp, vertical = 15.dp)
+                                .padding(horizontal = 10.dp, vertical = 5.dp)
                                 .align(Alignment.TopEnd),
+                            horizontalArrangement = Arrangement.spacedBy(5.dp),
                         ) {
                             Icon(
-                                imageVector = (Icons.Filled.ArrowUpward),
+                                painter = painterResource(R.drawable.arrow_up),
                                 contentDescription = null,
-                                tint = Color.White,
                                 modifier = Modifier
                                     .height(30.dp)
-                                    .graphicsLayer(scaleY = 2.5f, scaleX = 1.5f)
+                                    .graphicsLayer(scaleY = 2.5f, scaleX = 1.5f),
+                                tint = Color.White
                             )
                             Icon(
-                                imageVector = (Icons.Filled.ArrowDownward),
+                                painter = painterResource(R.drawable.arrow_down),
                                 contentDescription = null,
-                                tint = Color.White,
                                 modifier = Modifier
                                     .height(30.dp)
-                                    .graphicsLayer(scaleY = 2.5f, scaleX = 1.5f)
+                                    .graphicsLayer(scaleY = 2.5f, scaleX = 1.5f),
+                                tint = Color.White
                             )
                         }
                     }
