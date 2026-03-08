@@ -196,7 +196,6 @@ fun ResponsiveHeading(text: String){
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-
         val fontSize = when {
             maxWidth < 360.dp -> 26.sp   // very small phones
             else -> 28.sp

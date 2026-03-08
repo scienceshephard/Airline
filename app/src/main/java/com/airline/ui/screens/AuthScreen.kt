@@ -1,5 +1,9 @@
 package com.airline.ui.screens
 
+import android.app.Activity
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -30,14 +34,18 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -51,21 +59,38 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.airline.R
+import com.airline.firebase_auth.AuthState
+import com.airline.firebase_auth.AuthenticationFirebase
 import com.airline.ui.theme.Typography
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalStdlibApi::class)
 @Composable
 fun SignupScreen(
-    navController: NavHostController
-
+    authViewModel: AuthenticationFirebase,
+    onNavigateToLogin: () -> Unit,
+    onNavigateToHome: () -> Unit,
 ){
     var userName by rememberSaveable { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+
+    val authState by authViewModel.authState.collectAsState()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    val webclientId = context.getString(R.string.default_web_client_id)
+
     val annotatedText = buildAnnotatedString {
         append("Already have an account?")
         pushStringAnnotation(tag = "click_here", annotation = "here_clicked")
@@ -78,6 +103,11 @@ fun SignupScreen(
             append("Log in")
         }
         pop()
+    }
+    LaunchedEffect(authState) {
+        if(authState is AuthState.Success){
+            onNavigateToHome
+        }
     }
     Column(
         modifier = Modifier
@@ -230,9 +260,11 @@ fun SignupScreen(
 
             MyButton(
                 click = {
-                    navController.navigate(Screen.MainGraph.route){
-                        popUpTo(Screen.Signup.route){inclusive = true}
-                    }
+                    authViewModel.registerWithEmail(
+                        email = email,
+                        password = password,
+                        displayName = userName,
+                    )
                 },
                 btnText = "Sign up",
             )
@@ -266,7 +298,29 @@ fun SignupScreen(
             ) {
                 Button(
                     onClick = {
-                        navController.navigate(Screen.MainGraph.route)
+                        val credentialManager = CredentialManager.create(context)
+                        val googleIdOption = GetGoogleIdOption.Builder()
+                            .setFilterByAuthorizedAccounts(false)
+                            .setServerClientId(webclientId)
+                            .build()
+                        val request = GetCredentialRequest.Builder()
+                            .addCredentialOption(googleIdOption)
+                            .build()
+                        scope.launch {
+                            try{
+                                val result = credentialManager.getCredential(context, request)
+                                val credential = result.credential
+                                if(credential is CustomCredential &&
+                                    credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL){
+                                    val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                                    val idToken = googleIdTokenCredential.idToken
+                                    authViewModel.signInWithGoogle(idToken)
+                                }
+                            }catch (e: Exception){
+                                Log.e("AUTH", "Credential Message Error: ${e.message}")
+                            }
+                        }
+
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
@@ -298,7 +352,7 @@ fun SignupScreen(
                     text = annotatedText,
                     modifier = Modifier
                         .clickable{
-                            navController.navigate(Screen.Login.route)
+                            onNavigateToLogin
                         }
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
@@ -312,11 +366,20 @@ fun SignupScreen(
 
 @Composable
 fun LoginScreen(
-    navController: NavHostController
+    authViewModel: AuthenticationFirebase,
+    onNavigateToSignUp: () -> Unit,
+    onNavigateToHome: () -> Unit
 ){
     var email by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+
+    val authState by authViewModel.authState.collectAsState()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val webClientId = context.getString(R.string.default_web_client_id)
+
+
     val annotatedText = buildAnnotatedString {
         append("Don't have an account?")
         pushStringAnnotation(tag = "click_here", annotation = "here_clicked")
@@ -329,6 +392,12 @@ fun LoginScreen(
             append("Sign up")
         }
         pop()
+    }
+
+    LaunchedEffect(authState) {
+        if(authState is AuthState.Success){
+            onNavigateToHome
+        }
     }
     Column(
         modifier = Modifier
@@ -449,7 +518,10 @@ fun LoginScreen(
 
             MyButton(
                 click = {
-                    navController.navigate(Screen.MainGraph.route)
+                    authViewModel.signInWithEmail(
+                        email = email,
+                        password = password
+                    )
                 },
                 btnText = "Log in",
             )
@@ -483,7 +555,29 @@ fun LoginScreen(
             ) {
                 Button(
                     onClick = {
-                        navController.navigate(Screen.MainGraph.route)
+                        val credentialManager = CredentialManager.create(context)
+                        val googleIdOption = GetGoogleIdOption.Builder()
+                            .setFilterByAuthorizedAccounts(false)
+                            .setServerClientId(webClientId)
+                            .build()
+                        val request = GetCredentialRequest.Builder()
+                            .addCredentialOption(googleIdOption)
+                            .build()
+                        scope.launch {
+                            try{
+                                val result = credentialManager.getCredential(context, request)
+                                val credential = result.credential
+                                if(credential is CustomCredential &&
+                                    credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL){
+                                    val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                                    val idToken = googleIdTokenCredential.idToken
+                                    authViewModel.signInWithGoogle(idToken)
+                                }
+                            }catch (e: Exception){
+                                Log.e("AUTH", "Credential Message Error: ${e.message}")
+                            }
+                        }
+                        onNavigateToHome
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
@@ -515,7 +609,7 @@ fun LoginScreen(
                     text = annotatedText,
                     modifier = Modifier
                         .clickable{
-                            navController.navigate(Screen.Signup.route)
+                            onNavigateToSignUp
                         }
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
@@ -525,10 +619,4 @@ fun LoginScreen(
             }
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun Preview(){
-    LoginScreen(navController = rememberNavController())
 }

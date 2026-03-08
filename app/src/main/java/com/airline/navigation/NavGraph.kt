@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.airline.firebase_auth.AuthenticationFirebase
 import com.airline.ui.screens.LoginScreen
 import com.airline.ui.screens.MainScreens
 import com.airline.ui.theme.AnimatedSplashScreen
@@ -24,7 +26,10 @@ import com.airline.ui.screens.main_screens.NotificationScreen
 import com.airline.ui.screens.main_screens.ProfileScreen
 
 @Composable
-fun SetupNavGraph( navController: NavHostController ){
+fun SetupNavGraph(
+    navController: NavHostController,
+    authViewModel: AuthenticationFirebase = viewModel()
+){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -47,10 +52,34 @@ fun SetupNavGraph( navController: NavHostController ){
                 route = Screen.AuthGraph.route
             ){
                 composable(Screen.Login.route) {
-                    LoginScreen(navController)
+                    LoginScreen(
+                        authViewModel = authViewModel,
+                        onNavigateToSignUp = {
+                            navController.navigate(Screen.Signup.route){
+                                popUpTo(Screen.Signup.route){inclusive = true}
+                            }
+                        },
+                        onNavigateToHome ={
+                            navController.navigate(Screen.MainGraph.route){
+                                popUpTo(Screen.Login.route) { inclusive = true }
+                            }
+                        }
+                    )
                 }
                 composable (Screen.Signup.route){
-                    SignupScreen(navController)
+                    SignupScreen(
+                        authViewModel = authViewModel,
+                        onNavigateToLogin = {
+                            navController.navigate(Screen.MainGraph.route){
+                                popUpTo(Screen.Login.route){inclusive = true}
+                            }
+                        },
+                        onNavigateToHome = {
+                            navController.navigate(Screen.MainGraph.route){
+                                popUpTo(Screen.Login.route){ inclusive = true }
+                            }
+                        }
+                    )
                 }
             }
 

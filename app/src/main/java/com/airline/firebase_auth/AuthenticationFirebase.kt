@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 
-class Authentication: ViewModel() {
+class AuthenticationFirebase: ViewModel() {
     private val auth: FirebaseAuth= FirebaseAuth.getInstance()
     private val firestore: FirebaseFirestore = Firebase.firestore
 
@@ -56,7 +56,7 @@ class Authentication: ViewModel() {
         }
     }
 
-    fun SignInWithEmail(email: String, password: String){
+    fun signInWithEmail(email: String, password: String){
         if(email.isBlank() || password.isBlank()){
             _authState.value = AuthState.Error("Email  and password cannot be empty")
             return
@@ -72,11 +72,7 @@ class Authentication: ViewModel() {
                         val user = auth.currentUser
                     }else{
                         Log.w("TAG", "signInWithEmail:failure", task.exception)
-                        Toast.makeText(
-                            null,
-                            "Authentication failed!!!!",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        _authState.value = AuthState.Error("Authenticatin failed: ${task.exception?.message}")
                     }
                 }.await()
 

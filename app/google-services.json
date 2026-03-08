@@ -12,7 +12,20 @@
           "package_name": "com.airline"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "229301548528-v7c2j9va40ukaetqn7kitrjbvt448bd4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.airline",
+            "certificate_hash": "d74e06d4e9a0f52d6e7bcdec9ed1e69b14bd7c1d"
+          }
+        },
+        {
+          "client_id": "229301548528-n3bmf57jo3s6c0db0719g145ghdodo1e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBH_1AfmrBwFMKwO3lbhBeUIkD_JdlozCA"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "229301548528-n3bmf57jo3s6c0db0719g145ghdodo1e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
